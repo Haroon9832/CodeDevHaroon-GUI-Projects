@@ -154,6 +154,13 @@ class AuthSystem:
             """)
             conn.commit()
     
+    def user_exists(self, username):
+        """Checks if a user with the given username already exists in the database."""
+        with sqlite3.connect(self.db_path) as conn:
+            cursor = conn.cursor()
+            cursor.execute("SELECT 1 FROM users WHERE username = ?", (username,))
+            return cursor.fetchone() is not None
+
     def register_user(self, username, password, email, security_question, security_answer):
         if not self.validate_password_strength(password):
             return False, "Password does not meet security requirements"
@@ -289,7 +296,7 @@ class AuthSystem:
             return False
         return True
 
-# Initialize authentication system
+# Initialize authentication system globally
 auth_system = AuthSystem()
 
 # =====================
@@ -557,11 +564,12 @@ class ForgotPasswordDialog(QDialog):
             return
         
         # Reset password
-        if auth_system.reset_password(self.current_username, new_pass):
+        success, message = auth_system.reset_password(self.current_username, new_pass)
+        if success:
             QMessageBox.information(self, "Success", "Password has been reset successfully")
             self.accept()
         else:
-            QMessageBox.warning(self, "Error", "Failed to reset password")
+            QMessageBox.warning(self, "Error", f"Failed to reset password: {message}")
 
 class MainWindow(QMainWindow):
     def __init__(self, username):
@@ -652,7 +660,7 @@ class PatientManagement(QWidget):
         
         # Patient table
         self.patient_table = QTableWidget()
-        self.patient_table.setColumnCount(10)
+        self.patient_table.setColumnCount(11) # Increased column count for the "Actions" column
         self.patient_table.setHorizontalHeaderLabels([
             "ID", "Name", "Age", "Gender", "Contact", "CNIC", "Diagnosis", 
             "Admit Date", "Room", "Doctor", "Actions"
@@ -1181,18 +1189,28 @@ if __name__ == "__main__":
     # Apply global stylesheet
     app.setStyleSheet(GLOBAL_STYLESHEET)
     
-    # Register admin user
-    auth_system.register_user(
-        username="admin",
-        password="Admin@12345678",
-        email="admin@hospital.com",
-        security_question="What is your favorite color?",
-        security_answer="blue"
-    )
+    # Conditionally register admin user ONLY if they don't exist
+    # auth_system is already initialized globally, no need to reinitialize
+    if not auth_system.user_exists("admin"):
+        print("Registering default admin user...")
+        success, message = auth_system.register_user(
+            username="admin",
+            password="Admin@12345678", # Default password
+            email="admin@hospital.com",
+            security_question="What is your favorite color?",
+            security_answer="blue"
+        )
+        if not success:
+            print(f"Warning: Failed to register default admin user: {message}")
+        else:
+            print("Default admin user registered successfully.")
+    else:
+        print("Admin user already exists. Skipping default registration.")
     
     # Show login dialog
     login = LoginDialog()
     if login.exec() == QDialog.DialogCode.Accepted:
-        main_window = MainWindow(login.username.text())
+        # Use the actual logged-in username from the LoginDialog
+        main_window = MainWindow(login.logged_in_user['username']) 
         main_window.show()
         sys.exit(app.exec())
