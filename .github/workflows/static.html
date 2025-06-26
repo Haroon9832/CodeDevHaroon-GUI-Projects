@@ -1,0 +1,366 @@
+<!DOCTYPE html>
+<html lang="en">
+<head>
+    <meta charset="UTF-8">
+    <meta name="viewport" content="width=device-width, initial-scale=1.0">
+    <title>CodeDevHaroon.Portfolio - PyQt6 GUI Developer Portfolio</title>
+    <!-- Tailwind CSS CDN -->
+    <script src="https://cdn.tailwindcss.com"></script>
+    <link href="https://fonts.googleapis.com/css2?family=Inter:wght@300;400;600;700&display=swap" rel="stylesheet">
+    <style>
+        body {
+            font-family: 'Inter', sans-serif;
+            background-color: #f8fafc; /* Light gray background */
+            color: #334155; /* Dark slate gray text */
+        }
+        .header-bg {
+            background-color: #1e293b; /* Darker blue-gray for header */
+        }
+        .accent-color {
+            color: #0d9488; /* Teal accent color */
+        }
+        .btn-primary {
+            background-color: #0d9488; /* Teal button */
+            color: white;
+            transition: background-color 0.3s ease;
+        }
+        .btn-primary:hover {
+            background-color: #0f766e; /* Darker teal on hover */
+        }
+        .card-bg {
+            background-color: white;
+            box-shadow: 0 4px 6px rgba(0, 0, 0, 0.1);
+            transition: transform 0.2s ease-in-out;
+        }
+        .card-bg:hover {
+            transform: translateY(-5px);
+        }
+
+        /* Modal Styles */
+        .modal {
+            display: none; /* Hidden by default */
+            position: fixed; /* Stay in place */
+            z-index: 1000; /* Sit on top */
+            left: 0;
+            top: 0;
+            width: 100%; /* Full width */
+            height: 100%; /* Full height */
+            overflow: auto; /* Enable scroll if needed */
+            background-color: rgba(0,0,0,0.8); /* Black w/ opacity */
+            align-items: center;
+            justify-content: center;
+            padding: 20px;
+        }
+
+        .modal-content {
+            background-color: #fefefe;
+            margin: auto;
+            padding: 20px;
+            border-radius: 8px;
+            max-width: 90%;
+            max-height: 90%;
+            overflow-y: auto;
+            position: relative;
+            box-shadow: 0 8px 16px rgba(0,0,0,0.3);
+            display: flex;
+            flex-direction: column;
+            gap: 1rem;
+        }
+
+        .modal-header {
+            display: flex;
+            justify-content: space-between;
+            align-items: center;
+            border-bottom: 1px solid #e2e8f0;
+            padding-bottom: 10px;
+            margin-bottom: 15px;
+        }
+
+        .modal-header h2 {
+            font-size: 1.8rem;
+            font-weight: bold;
+            color: #1e293b;
+        }
+
+        .close-button {
+            color: #aaa;
+            font-size: 28px;
+            font-weight: bold;
+            cursor: pointer;
+            padding: 5px 10px;
+            border-radius: 5px;
+            transition: background-color 0.3s;
+        }
+
+        .close-button:hover,
+        .close-button:focus {
+            color: #333;
+            background-color: #e2e8f0;
+            text-decoration: none;
+        }
+
+        .modal-gallery {
+            display: grid;
+            grid-template-columns: repeat(auto-fit, minmax(280px, 1fr));
+            gap: 1rem;
+            max-height: calc(90vh - 150px); /* Adjust based on header/footer */
+            overflow-y: auto;
+            padding-right: 10px; /* For scrollbar */
+        }
+
+        .modal-gallery img {
+            width: 100%;
+            height: auto;
+            border-radius: 6px;
+            box-shadow: 0 2px 4px rgba(0,0,0,0.1);
+            object-fit: contain; /* Ensure full image is visible */
+            background-color: #f0f0f0; /* Light background for images */
+        }
+    </style>
+</head>
+<body>
+    <div class="min-h-screen flex flex-col">
+        <!-- Header -->
+        <header class="header-bg text-white p-4 sm:p-6 shadow-lg rounded-b-lg">
+            <div class="container mx-auto flex flex-col sm:flex-row justify-between items-center px-4">
+                <h1 class="text-3xl font-bold mb-2 sm:mb-0 rounded-md p-2 hover:bg-slate-700 transition duration-300">
+                    CodeDevHaroon.Portfolio
+                </h1>
+                <nav>
+                    <ul class="flex space-x-4 sm:space-x-8 text-lg font-medium">
+                        <li><a href="#about" class="hover:accent-color transition duration-300 p-2 rounded-md hover:bg-slate-700">About</a></li>
+                        <li><a href="#projects" class="hover:accent-color transition duration-300 p-2 rounded-md hover:bg-slate-700">Projects</a></li>
+                        <li><a href="#contact" class="hover:accent-color transition duration-300 p-2 rounded-md hover:bg-slate-700">Contact</a></li>
+                    </ul>
+                </nav>
+            </div>
+        </header>
+
+        <!-- Main Content Area -->
+        <main class="flex-grow container mx-auto p-4 sm:p-8">
+            <!-- Hero Section -->
+            <section id="hero" class="text-center py-16 sm:py-24 rounded-xl card-bg mb-8">
+                <h2 class="text-4xl sm:text-5xl font-extrabold mb-4 leading-tight">
+                    Hello, I'm <span class="accent-color">Haroon Rashid Khan</span>
+                </h2>
+                <p class="text-xl sm:text-2xl text-gray-600 mb-6">
+                    A dedicated <span class="font-semibold">PyQt6 GUI Developer</span> crafting intuitive and robust desktop applications.
+                </p>
+                <a href="#projects" class="inline-block btn-primary px-8 py-3 text-lg font-semibold rounded-full shadow-md hover:shadow-lg">
+                    View My Projects
+                </a>
+            </section>
+
+            <!-- About Section -->
+            <section id="about" class="py-12 sm:py-16 rounded-xl card-bg mb-8 px-4 sm:px-8">
+                <h2 class="text-3xl sm:text-4xl font-bold text-center mb-8 accent-color">About Me</h2>
+                <div class="max-w-3xl mx-auto text-lg text-gray-700 leading-relaxed">
+                    <p class="mb-4">
+                        Welcome to CodeDevHaroon's portfolio! I specialize in building PyQt6 GUI Applications, showcasing a collection of interactive desktop apps developed with PyQt6 and Python.
+                    </p>
+                    <p class="mb-4">
+                        My projects, including a Hospital Management System, Encryption Software, and Sales Management App, demonstrate my skills in creating clean user interfaces, implementing robust event handling, and integrating with databases for seamless functionality.
+                    </p>
+                    <p>
+                        I am committed to developing practical and efficient desktop solutions. Follow along for more of my PyQt6 projects!
+                    </p>
+                </div>
+            </section>
+
+            <!-- Projects Section -->
+            <section id="projects" class="py-12 sm:py-16 rounded-xl card-bg mb-8 px-4 sm:px-8">
+                <h2 class="text-3xl sm:text-4xl font-bold text-center mb-10 accent-color">My Projects</h2>
+                <div class="grid grid-cols-1 md:grid-cols-2 lg:grid-cols-3 gap-8">
+
+                    <!-- Hospital Management System Project Card -->
+                    <div class="card-bg p-6 rounded-lg text-center">
+                        <!-- Image now triggers modal -->
+                        <img id="openHospitalModal" src="https://raw.githubusercontent.com/Haroon9832/CodeDevHaroon-GUI-Projects/7761a960efd9789f38072d67f179145a9e36b554/Hospital%20Management%20Project/Images/Login.png" alt="Hospital Management System Login Screen" class="w-full h-48 object-cover rounded-md mb-4 shadow-md cursor-pointer hover:opacity-80 transition duration-300">
+                        <h3 class="text-2xl font-semibold mb-2 accent-color">Hospital Management System</h3>
+                        <p class="text-gray-700 mb-4">
+                            A comprehensive PyQt6-based Hospital Management System designed to streamline various hospital operations. Key features include user authentication, patient management, doctor management, ward and room allocation, billing and cost tracking, and detailed reports and analytics for efficient administration.
+                        </p>
+                        <div class="flex flex-col sm:flex-row justify-center gap-4">
+                            <button id="openHospitalModalBtn" class="inline-block btn-primary px-6 py-2 rounded-full text-sm font-medium shadow-md">
+                                View Screenshots
+                            </button>
+                            <!-- Link to the GitHub repository of the project -->
+                            <a href="https://github.com/Haroon9832/CodeDevHaroon-GUI-Projects/tree/7761a960efd9789f38072d67f179145a9e36b554/Hospital%20Management%20Project" target="_blank" class="inline-block btn-primary px-6 py-2 rounded-full text-sm font-medium shadow-md">
+                                View Code on GitHub
+                            </a>
+                        </div>
+                    </div>
+
+                    <!-- Encryption Software Project Card -->
+                    <div class="card-bg p-6 rounded-lg text-center">
+                        <!-- Main image for Encryption Software from the provided GitHub link -->
+                        <img id="openEncryptionModalImg" src="https://raw.githubusercontent.com/Haroon9832/CodeDevHaroon-GUI-Projects/main/Encryption%20Software/Secure%20File%20Encryption%20Tool.png" alt="Secure File Encryption Tool Screenshot" class="w-full h-48 object-cover rounded-md mb-4 shadow-md cursor-pointer hover:opacity-80 transition duration-300">
+                        <h3 class="text-2xl font-semibold mb-2 accent-color">Encryption Software</h3>
+                        <p class="text-gray-700 mb-4">
+                            A PyQt6-based desktop application for secure data encryption and decryption, providing a user-friendly interface to protect sensitive information using robust cryptographic algorithms.
+                        </p>
+                        <div class="flex flex-col sm:flex-row justify-center gap-4">
+                            <button id="openEncryptionModalBtn" class="inline-block btn-primary px-6 py-2 rounded-full text-sm font-medium shadow-md">
+                                View Screenshots
+                            </button>
+                            <a href="https://github.com/Haroon9832/CodeDevHaroon-GUI-Projects/tree/main/Encryption%20Software" target="_blank" class="inline-block btn-primary px-6 py-2 rounded-full text-sm font-medium shadow-md">
+                                View Code on GitHub
+                            </a>
+                        </div>
+                    </div>
+
+                    <!-- Sales Management App Project Card -->
+                    <div class="card-bg p-6 rounded-lg text-center">
+                        <!-- Updated main image for Sales Management App from GitHub raw URL -->
+                        <img id="openSalesModalImg" src="https://raw.githubusercontent.com/Haroon9832/CodeDevHaroon-GUI-Projects/main/Sales%20Management%20App/Images/Retail%20Store%20Management%20System%206_26_2025%2012_32_24%20PM.png" alt="Retail Store Management System Inventory" class="w-full h-48 object-cover rounded-md mb-4 shadow-md cursor-pointer hover:opacity-80 transition duration-300">
+                        <h3 class="text-2xl font-semibold mb-2 accent-color">Sales Management App</h3>
+                        <p class="text-gray-700 mb-4">
+                            A PyQt6-powered Sales Management application designed to track sales, manage inventory, process orders, and generate reports for businesses. Features include product addition/editing, sales logging, and cost/profit tracking.
+                        </p>
+                        <div class="flex flex-col sm:flex-row justify-center gap-4">
+                            <button id="openSalesModalBtn" class="inline-block btn-primary px-6 py-2 rounded-full text-sm font-medium shadow-md">
+                                View Screenshots
+                            </button>
+                            <!-- Updated GitHub link for Sales Management App -->
+                            <a href="https://github.com/Haroon9832/CodeDevHaroon-GUI-Projects/tree/main/Sales%20Management%20App" target="_blank" class="inline-block btn-primary px-6 py-2 rounded-full text-sm font-medium shadow-md">
+                                View Code on GitHub
+                            </a>
+                        </div>
+                    </div>
+
+                </div>
+            </section>
+
+            <!-- Contact Section -->
+            <section id="contact" class="py-12 sm:py-16 rounded-xl card-bg mb-8 px-4 sm:px-8">
+                <h2 class="text-3xl sm:text-4xl font-bold text-center mb-8 accent-color">Get In Touch</h2>
+                <div class="max-w-xl mx-auto text-center text-lg text-gray-700">
+                    <p class="mb-6">
+                        Have a project in mind or just want to say hello? Feel free to reach out! I'm always open to new opportunities and collaborations.
+                    </p>
+                    <div class="space-y-4">
+                        <p>
+                            <strong class="font-semibold">Email:</strong> <a href="mailto:hroon.rasheed007@gmail.com" class="accent-color hover:underline">hroon.rasheed007@gmail.com</a>
+                        </p>
+                        <p>
+                            <strong class="font-semibold">GitHub:</strong> <a href="https://github.com/Haroon9832/CodeDevHaroon-GUI-Projects" target="_blank" class="accent-color hover:underline">github.com/Haroon9832/CodeDevHaroon-GUI-Projects</a>
+                        </p>
+                        <!-- You can add your Fiverr/Upwork profile links here -->
+                        <p>
+                            <strong class="font-semibold">Fiverr:</strong> <a href="https://www.fiverr.com/yourusername" target="_blank" class="accent-color hover:underline">fiverr.com/yourusername</a>
+                        </p>
+                    </div>
+                </div>
+            </section>
+        </main>
+
+        <!-- Footer -->
+        <footer class="header-bg text-white py-6 mt-auto rounded-t-lg">
+            <div class="container mx-auto text-center text-sm px-4">
+                <p>&copy; 2025 Haroon Rashid Khan. All rights reserved.</p>
+                <p class="mt-2">Built with ❤️ and PyQt6 passion.</p>
+            </div>
+        </footer>
+    </div>
+
+    <!-- Hospital Management System Modal -->
+    <div id="hospitalModal" class="modal">
+        <div class="modal-content">
+            <div class="modal-header">
+                <h2>Hospital Management System Screenshots</h2>
+                <span class="close-button" onclick="closeHospitalModal()">&times;</span>
+            </div>
+            <div class="modal-gallery">
+                <img src="https://raw.githubusercontent.com/Haroon9832/CodeDevHaroon-GUI-Projects/7761a960efd9789f38072d67f179145a9e36b554/Hospital%20Management%20Project/Images/Login.png" alt="Hospital Management System Login">
+                <img src="https://raw.githubusercontent.com/Haroon9832/CodeDevHaroon-GUI-Projects/7761a960efd9789f38072d67f179145a9e36b554/Hospital%20Management%20Project/Images/PatientManagement.png" alt="Hospital Management System Patient Management">
+                <img src="https://raw.githubusercontent.com/Haroon9832/CodeDevHaroon-GUI-Projects/7761a960efd9789f38072d67f179145a9e36b554/Hospital%20Management%20Project/Images/Doctor%20Management.png" alt="Hospital Management System Doctor Management">
+                <img src="https://raw.githubusercontent.com/Haroon9832/CodeDevHaroon-GUI-Projects/7761a960efd9789f38072d67f179145a9e36b554/Hospital%20Management%20Project/Images/WardManagement.png" alt="Hospital Management System Ward Management">
+                <img src="https://raw.githubusercontent.com/Haroon9832/CodeDevHaroon-GUI-Projects/7761a960efd9789f38072d67f179145a9e36b554/Hospital%20Management%20Project/Images/BillingCost.png" alt="Hospital Management System Billing & Cost">
+                <img src="https://raw.githubusercontent.com/Haroon9832/CodeDevHaroon-GUI-Projects/7761a960efd9789f38072d67f179145a9e36b554/Hospital%20Management%20Project/Images/Reports.png" alt="Hospital Management System Reports & Analytics">
+            </div>
+        </div>
+    </div>
+
+    <!-- Encryption Software Modal -->
+    <div id="encryptionModal" class="modal">
+        <div class="modal-content">
+            <div class="modal-header">
+                <h2>Encryption Software Screenshots</h2>
+                <span class="close-button" onclick="closeEncryptionModal()">&times;</span>
+            </div>
+            <div class="modal-gallery">
+                <img src="https://raw.githubusercontent.com/Haroon9832/CodeDevHaroon-GUI-Projects/main/Encryption%20Software/Secure%20File%20Encryption%20Tool.png" alt="Secure File Encryption Tool Main Screen">
+            </div>
+        </div>
+    </div>
+
+    <!-- Sales Management App Modal -->
+    <div id="salesModal" class="modal">
+        <div class="modal-content">
+            <div class="modal-header">
+                <h2>Sales Management App Screenshots</h2>
+                <span class="close-button" onclick="closeSalesModal()">&times;</span>
+            </div>
+            <div class="modal-gallery">
+                <img src="https://raw.githubusercontent.com/Haroon9832/CodeDevHaroon-GUI-Projects/main/Sales%20Management%20App/Images/Retail%20Store%20Management%20System%206_26_2025%2012_32_24%20PM.png" alt="Retail Store Management System Inventory Management">
+                <img src="https://raw.githubusercontent.com/Haroon9832/CodeDevHaroon-GUI-Projects/main/Sales%20Management%20App/Images/Retail%20Store%20Management%20System%206_26_2025%2012_32%2027%20PM.png" alt="Retail Store Management System Sales Logging">
+                <img src="https://raw.githubusercontent.com/Haroon9832/CodeDevHaroon-GUI-Projects/main/Sales%20Management%20App/Images/Retail%20Store%20Management%20System%206_26_2025%2012_32_31%20PM.png" alt="Retail Store Management System Add/Edit Product">
+            </div>
+        </div>
+    </div>
+
+    <script>
+        // Get modals
+        const hospitalModal = document.getElementById('hospitalModal');
+        const encryptionModal = document.getElementById('encryptionModal');
+        const salesModal = document.getElementById('salesModal');
+
+        // Get buttons that open modals
+        const openHospitalModalImg = document.getElementById('openHospitalModal');
+        const openHospitalModalBtn = document.getElementById('openHospitalModalBtn');
+        const openEncryptionModalImg = document.getElementById('openEncryptionModalImg');
+        const openEncryptionModalBtn = document.getElementById('openEncryptionModalBtn');
+        const openSalesModalImg = document.getElementById('openSalesModalImg');
+        const openSalesModalBtn = document.getElementById('openSalesModalBtn');
+
+        // Function to open specific modal
+        function openModal(modalId) {
+            document.getElementById(modalId).style.display = 'flex';
+        }
+
+        // Function to close specific modal
+        function closeModal(modalId) {
+            document.getElementById(modalId).style.display = 'none';
+        }
+
+        // Event Listeners for Hospital Management System
+        openHospitalModalImg.onclick = () => openModal('hospitalModal');
+        openHospitalModalBtn.onclick = () => openModal('hospitalModal');
+        hospitalModal.querySelector('.close-button').onclick = () => closeModal('hospitalModal');
+
+        // Event Listeners for Encryption Software
+        openEncryptionModalImg.onclick = () => openModal('encryptionModal');
+        openEncryptionModalBtn.onclick = () => openModal('encryptionModal');
+        encryptionModal.querySelector('.close-button').onclick = () => closeModal('encryptionModal');
+
+        // Event Listeners for Sales Management App
+        openSalesModalImg.onclick = () => openModal('salesModal');
+        openSalesModalBtn.onclick = () => openModal('salesModal');
+        salesModal.querySelector('.close-button').onclick = () => closeModal('salesModal');
+
+
+        // Close modals when clicking anywhere outside of the modal content
+        window.onclick = function(event) {
+            if (event.target == hospitalModal) {
+                closeModal('hospitalModal');
+            }
+            if (event.target == encryptionModal) {
+                closeModal('encryptionModal');
+            }
+            if (event.target == salesModal) {
+                closeModal('salesModal');
+            }
+        }
+    </script>
+</body>
+</html>
