@@ -15,7 +15,7 @@ import base64
 class MainWindow(QWidget):
     def __init__(self):
         super().__init__()
-        self.setWindowTitle("Secure File Encryption Tool")
+        self.setWindowTitle("Data Encrypter")
       
         self.setGeometry(100, 100, 700, 350)
   
